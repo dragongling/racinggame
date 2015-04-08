@@ -4,6 +4,8 @@
 #include "Texture.h"
 #include "Coordinates.h"
 
+хуйыуцуацуп
+
 using namespace std;
 
 //TODO: move to game class and divide by init, mainLoop, exit and etc.

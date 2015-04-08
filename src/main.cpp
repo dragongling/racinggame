@@ -1,18 +1,9 @@
-#include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "Texture.h"
 #include "Coordinates.h"
-Û‡Û‡ˆÈ‡
+#include "Player.h"
 
-
-
-
-
-
-
-ˆÛ‡saferg'rhj 
-rehrwlkhrt'
 using namespace std;
 
 //TODO: move to game class and divide by init, mainLoop, exit and etc.
@@ -29,43 +20,31 @@ int main() {
     const std::string gameFolder = "/home/alexander/Projects/programs/cpp/SDL/game1/";
 
     const std::string textureSubfolder = "res/img/";
-    Texture car(gameFolder + textureSubfolder + "car.png", ren, Coordinates(mainWindowScale.x / 2, mainWindowScale.y / 2));
+    Texture carTexture(gameFolder + textureSubfolder + "car.png", ren, Coordinates(mainWindowScale.x / 2, mainWindowScale.y / 2));
+    carTexture.scale *= 0.1;
+    carTexture.positionOffset = carTexture.centerOffset();
+    carTexture.angle = -90;
+    Player car(&carTexture);
+
     Texture grass(gameFolder + textureSubfolder + "grass.jpg", ren, Coordinates(0,0), Coordinates(50,50));
-    car.scale *= 0.1;
-    car.positionOffset = car.centerOffset();
 
     SDL_Event event;
     SDL_SetRenderDrawColor( ren, 0xFF, 0xFF, 0xFF, 0xFF ); //white background
 
     //TODO: move to map class or smth. similar:
-    int a = 0;
+    int a = -grass.scale.y;
 
     //TODO:replace one cycle with std::thread multithreading:
     bool quit = false;
     while (!quit){
-        //TODO: move to player class:
-        bool aright = false, aleft = false;
 
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT)
                 quit = true;
-
-            //TODO: move to player class:
-            if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_RIGHT)
-                aright = true;
-            if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_LEFT)
-                aleft = true;
-            if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_RIGHT)
-                aright = false;
-            if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_LEFT)
-                aleft = false;
+            car.handleEvent(event);
         }
 
-        //TODO: move to player class:
-        if(aright)
-            car.angle++;
-        if(aleft)
-            car.angle--;
+        car.handleControl();
 
         //Render the scene
         SDL_RenderClear(ren);
@@ -75,11 +54,12 @@ int main() {
             for(grass.position.x = 0; grass.position.x < mainWindowScale.x; grass.position.x += grass.scale.x)
                 grass.render();
         a++;
-        if(a > grass.scale.y)
-            a = 0;
+        if(a > 0)
+            a = -grass.scale.y;
 
-        car.render();
+        carTexture.render();
         SDL_RenderPresent(ren);
+        SDL_Delay(1000 / 60);
     }
 
     SDL_DestroyRenderer(ren);

@@ -23,8 +23,8 @@ void Texture::load(const std::string &filename, SDL_Renderer *renderer){
 
 void Texture::render() {
     SDL_Rect dst;
-    dst.x = position.x + positionOffset.x;
-    dst.y = position.y + positionOffset.y;
+    dst.x = position.x - positionOffset.x;
+    dst.y = position.y - positionOffset.y;
     dst.w = scale.x;
     dst.h = scale.y;
     SDL_RenderCopyEx(renderer, texture, NULL, &dst, angle, NULL, SDL_FLIP_NONE);

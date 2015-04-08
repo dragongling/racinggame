@@ -67,6 +67,7 @@
     <ClCompile Include="src\Coordinates.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Texture.cpp" />
+    <ClCompile Include="Заебок.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Coordinates.h" />

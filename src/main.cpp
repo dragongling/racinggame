@@ -3,9 +3,16 @@
 #include <SDL2/SDL_image.h>
 #include "Texture.h"
 #include "Coordinates.h"
+óàóàöéà
 
-õóéûóöóàöóï
 
+
+
+
+
+
+öóàsaferg'rhj 
+rehrwlkhrt'
 using namespace std;
 
 //TODO: move to game class and divide by init, mainLoop, exit and etc.

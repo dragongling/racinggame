@@ -18,3 +18,21 @@ void Coordinates::operator*=(const double rvalue) {
     x *= rvalue;
     y *= rvalue;
 }
+
+Coordinates::Coordinates(const Coordinates &rvalue) {
+    x = rvalue.x;
+    y = rvalue.y;
+}
+
+Coordinates Coordinates::operator*(const Coordinates rvalue) {
+    return Coordinates(x * rvalue.x, y * rvalue.y);
+}
+
+Coordinates Coordinates::operator-(const Coordinates rvalue) {
+    return Coordinates(x - rvalue.x, y - rvalue.y);
+}
+
+void Coordinates::operator+=(const Coordinates rvalue) {
+    x += rvalue.x;
+    y += rvalue.y;
+}

@@ -12,8 +12,13 @@ public:
 
     Coordinates();
     Coordinates(int x, int y);
+    Coordinates(const Coordinates &rvalue);
 
+    Coordinates operator*(const Coordinates rvalue);
+
+    Coordinates operator-(const Coordinates rvalue);
     void operator*=(const double rvalue);
+    void operator+=(const Coordinates rvalue);
 };
 
 

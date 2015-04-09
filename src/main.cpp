@@ -1,8 +1,9 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include "Texture.h"
 #include "Coordinates.h"
+#include "Texture.h"
 #include "Player.h"
+#include "Map.h"
 
 using namespace std;
 
@@ -26,13 +27,11 @@ int main() {
     carTexture.angle = -90;
     Player car(&carTexture);
 
-    Texture grass(gameFolder + textureSubfolder + "grass.jpg", ren, Coordinates(0,0), Coordinates(50,50));
+    Map map(Coordinates(20,20), ren, Coordinates(50,50), Coordinates(0,10), Coordinates());
+    map.addTexture(gameFolder + textureSubfolder + "grass.jpg");
 
     SDL_Event event;
     SDL_SetRenderDrawColor( ren, 0xFF, 0xFF, 0xFF, 0xFF ); //white background
-
-    //TODO: move to map class or smth. similar:
-    int a = -grass.scale.y;
 
     //TODO:replace one cycle with std::thread multithreading:
     bool quit = false;
@@ -49,13 +48,8 @@ int main() {
         //Render the scene
         SDL_RenderClear(ren);
 
-        //TODO: move to map class or smth. similar:
-        for(grass.position.y = a; grass.position.y < mainWindowScale.y; grass.position.y += grass.scale.y)
-            for(grass.position.x = 0; grass.position.x < mainWindowScale.x; grass.position.x += grass.scale.x)
-                grass.render();
-        a++;
-        if(a > 0)
-            a = -grass.scale.y;
+        map.render();
+        map.move(Coordinates(0,0));
 
         carTexture.render();
         SDL_RenderPresent(ren);

@@ -7,6 +7,7 @@
 
 #include <SDL2/SDL.h>
 #include "Texture.h"
+#include "Map.h"
 
 class Player {
 public:
@@ -14,13 +15,15 @@ public:
 
     void handleEvent (const SDL_Event event);
 
-    void handleControl();
+    void handleControl(Map &map);
 
     ~Player();
 
 protected:
     Texture *texture;
     struct{ bool left, right; } angle {false, false};
+    struct{ bool forward, backward; } move{false, false};
+    unsigned int speed = 10;
 };
 
 

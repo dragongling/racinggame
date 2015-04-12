@@ -21,6 +21,12 @@ void Player::handleEvent(const SDL_Event event) {
             case SDLK_LEFT:
                 angle.left = true;
                 break;
+            case SDLK_UP:
+                move.forward = true;
+                break;
+            case SDLK_DOWN:
+                move.backward = true;
+                break;
             default:
                 break;
         }
@@ -32,15 +38,33 @@ void Player::handleEvent(const SDL_Event event) {
             case SDLK_LEFT:
                 angle.left = false;
                 break;
+            case SDLK_UP:
+                move.forward = false;
+                break;
+            case SDLK_DOWN:
+                move.backward = false;
+                break;
             default:
                 break;
         }
     }
 }
 
-void Player::handleControl() {
-    if(angle.right)
-        texture->angle++;
-    if(angle.left)
-        texture->angle--;
+void Player::handleControl(Map &map) {
+    if(move.forward) {
+        if (angle.right)
+            texture->angle++;
+        if (angle.left)
+            texture->angle--;
+        map.move(Coordinates(static_cast<int>(speed * cos(texture->angle * 0.017453292519)),
+                             static_cast<int>(speed * sin(texture->angle * 0.017453292519))));
+    }
+    if(move.backward) {
+        if (angle.right)
+            texture->angle--;
+        if (angle.left)
+            texture->angle++;
+        map.move(Coordinates(-static_cast<int>(speed * 0.5 * cos(texture->angle * 0.017453292519)),
+                             -static_cast<int>(speed * 0.5 * sin(texture->angle * 0.017453292519))));
+    }
 }

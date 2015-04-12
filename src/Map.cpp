@@ -2,11 +2,13 @@
 // Created by alexander on 4/9/15.
 //
 
+#include <iostream>
 #include "Map.h"
 
-Map::Map(const Coordinates size, SDL_Renderer *renderer, const Coordinates textureSize,
+Map::Map(const Coordinates size, SDL_Renderer *renderer, Coordinates *windowScale, const Coordinates textureSize,
          const Coordinates tileOffset, const Coordinates textureOffset){
     this->renderer = renderer;
+    this->windowScale = windowScale;
     this->textureSize = textureSize;
     mapArray = new unsigned char*[size.y];
     this->size = size;
@@ -22,14 +24,22 @@ Map::Map(const Coordinates size, SDL_Renderer *renderer, const Coordinates textu
 }
 
 void Map::render() {
-    //TODO: make restrict for end rendered tile dependent of window size
-    for(int y = (tileOffset.y - 1 >= 0 ? tileOffset.y - 1 : 0); y < size.y; ++y)
-        for(int x = (tileOffset.x - 1 >= 0 ? tileOffset.x - 1 : 0); x < size.x; ++x){
+    Coordinates startTile, endTile;
+    startTile.y = tileOffset.y - 1 >= 0 ? tileOffset.y - 1 : 0;
+    startTile.x = tileOffset.x - 1 >= 0 ? tileOffset.x - 1 : 0;
+    endTile.y = startTile.y + windowScale->y / textureSize.y + 3;
+    if(endTile.y > size.y)
+        endTile.y = size.y - 1;
+    endTile.x = startTile.x + windowScale->x / textureSize.x + 3;
+    if(endTile.x > size.x)
+        endTile.x = size.x - 1;
+    for(int y = startTile.y; y < endTile.y; ++y)
+        for(int x = startTile.x; x < endTile.x; ++x){
             if(mapArray[y][x] + 1 > texturePool.size())
                 throw std::logic_error("Invalid tile");
-            texturePool[mapArray[y][x]].position = textureSize * Coordinates(x - tileOffset.x,y - tileOffset.y)
+            texturePool[mapArray[y][x]]->position = textureSize * Coordinates(x - tileOffset.x,y - tileOffset.y)
                                                     - textureOffset;
-            texturePool[mapArray[y][x]].render();
+            texturePool[mapArray[y][x]]->render();
         }
 }
 
@@ -38,6 +48,8 @@ Map::~Map() {
         delete mapArray[i];
     }
     delete mapArray;
+    for(auto texture : texturePool)
+        delete texture;
 }
 
 void Map::move(const Coordinates moveCoords) {
@@ -53,6 +65,10 @@ void Map::move(const Coordinates moveCoords) {
 }
 
 void Map::addTexture(const std::string &filename) {
-    Texture *temp = new Texture(filename, renderer, Coordinates(0,0), textureSize);
-    texturePool.push_back(*temp);
+    texturePool.push_back(nullptr);
+    texturePool.back() = new Texture(filename, renderer, Coordinates(0,0), textureSize);
+}
+
+unsigned char *Map::operator[](const size_t rvalue) {
+    return mapArray[rvalue];
 }

@@ -27,8 +27,13 @@ int main() {
     carTexture.angle = -90;
     Player car(&carTexture);
 
-    Map map(Coordinates(20,20), ren, Coordinates(50,50), Coordinates(0,10), Coordinates());
+    Map map(Coordinates(100,100), ren, &mainWindowScale, Coordinates(50,50), Coordinates(0,90), Coordinates());
     map.addTexture(gameFolder + textureSubfolder + "grass.jpg");
+    map.addTexture(gameFolder + textureSubfolder + "asphalt.jpg");
+    for(int x = 0; x < 100; ++x)
+        for(int y = 0; y < 100; ++y)
+            if((x + y) % 2)
+                map[y][x] = 1;
 
     SDL_Event event;
     SDL_SetRenderDrawColor( ren, 0xFF, 0xFF, 0xFF, 0xFF ); //white background
@@ -43,13 +48,12 @@ int main() {
             car.handleEvent(event);
         }
 
-        car.handleControl();
+        car.handleControl(map);
 
         //Render the scene
         SDL_RenderClear(ren);
 
         map.render();
-        map.move(Coordinates(0,0));
 
         carTexture.render();
         SDL_RenderPresent(ren);

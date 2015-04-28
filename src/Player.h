@@ -21,8 +21,8 @@ public:
 
 protected:
     Texture *texture;
-    struct{ bool left, right; } angle {false, false};
-    struct{ bool forward, backward; } move{false, false};
+    struct{ bool left, right; } angle;
+    struct{ bool forward, backward; } move;
     unsigned int speed = 10;
 };
 

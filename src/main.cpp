@@ -8,7 +8,7 @@
 using namespace std;
 
 //TODO: move to game class and divide by init, mainLoop, exit and etc.
-int main() {
+int main(int argc, char *argv[])  {
     //TODO: make/apply window struct/class
     Coordinates mainWindowScale = {640, 480};
 
@@ -18,7 +18,7 @@ int main() {
     SDL_Renderer *ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
     //TODO: relative path:
-    const std::string gameFolder = "/home/alexander/Projects/programs/cpp/SDL/game1/";
+    const std::string gameFolder = "./";
 
     const std::string textureSubfolder = "res/img/";
     Texture carTexture(gameFolder + textureSubfolder + "car.png", ren, Coordinates(mainWindowScale.x / 2, mainWindowScale.y / 2));
